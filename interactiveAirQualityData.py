@@ -18,7 +18,9 @@ if uploaded_files:
     
     # Convert 'Date' column to integer (day of the month)
     if 'Date' in df.columns:
-        df['Date'] = df['Date'].astype(int)  # Ensure numeric format
+        df['Date'] = pd.to_numeric(df['Date'], errors='coerce')  # Convert, setting errors to NaN
+        df = df.dropna(subset=['Date'])  # Remove rows with NaN in 'Date'
+        df['Date'] = df['Date'].astype(int)  # Now safely convert to int
     
     # Reshape data to long format
     df_melted = df.melt(id_vars=['Date'], var_name='Month', value_name='Value')
